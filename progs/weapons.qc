@@ -329,39 +329,96 @@ void() BecomeExplosion =
 void() T_MissileTouch =
 {
 	local float	damg;
-
-	if (other == self.owner)
+	local vector reflected_vel;
+	
+	if (other == self.owner && self.health > 4)
 		return;		// don't explode on owner
+	
+	if (other.takedamage == DAMAGE_AIM || self.health <= 1)
+	{
+		damg = 100 + random()*20;
+	
+		if (other.health || self.health <= 1)
+		{
+			if (other.classname == "monster_shambler")
+				damg = damg * 0.5;	// mostly immune
+			T_Damage (other, self, self.owner, damg );
+		
+
+		sprint(self.owner,"le blow up the rocket...\n");
+		
+			// don't do radius damage to the other, because all the damage
+			// was done in the impact
+			T_RadiusDamage (self, self.owner, 120, other);
+
+		//	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
+			self.origin = self.origin - 8*normalize(self.velocity);
+			//sprint(self.owner,"hit a ");
+			//sprint(self.owner,other.classname);
+			//sprint(self.owner,"\n");
+			
+			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+			WriteByte (MSG_BROADCAST, TE_EXPLOSION);
+			WriteCoord (MSG_BROADCAST, self.origin_x);
+			WriteCoord (MSG_BROADCAST, self.origin_y);
+			WriteCoord (MSG_BROADCAST, self.origin_z);
+
+			BecomeExplosion ();
+			return;
+		}
+	}
+	else
+	{
+		
+		self.health = self.health - 1;
+		sprint(self.owner,"health = ");
+		sprint(self.owner, ftos(self.health));		
+		sprint(self.owner,"\n");
+		traceline(self.origin-normalize(self.velocity)*100, self.origin+self.velocity*1, FALSE, self);
+		//reflect off surface
+		//version 1 reflected_vel = 2 * (trace_plane_normal * self.velocity) * trace_plane_normal+ self.velocity;
+		reflected_vel = self.velocity - 2*(self.velocity*trace_plane_normal)*trace_plane_normal;
+		//reduce velocity
+		//reflected_vel = reflected_vel;
+		
+		//self.velocity = reflected_vel;
+		//self.angles = vectoangles(self.velocity);
+		//self.origin = trace_endpos;// + trace_plane_normal*5;
+		//setorigin (self, trace_endpos);
+		
+
+		//create a new rocket - for some reason just updating 
+		//the old entity doen't work..
+
+		local entity missile;
+		missile = spawn ();
+		
+		missile.health = self.health;
+		missile.owner = self.owner;
+		missile.movetype = MOVETYPE_FLYMISSILE;
+		missile.solid = SOLID_BBOX;
+		missile.classname = "tmissile";
+			
+	// set missile speed	
+		missile.velocity = reflected_vel;
+		missile.angles = vectoangles(missile.velocity);		
+		missile.touch = T_MissileTouch;
+		
+	// set missile duration
+		missile.nextthink = self.nextthink;
+		missile.think = SUB_Remove;
+		setmodel (missile, "progs/missile.mdl");
+		setsize (missile, '0 0 0', '0 0 0');		
+		setorigin (missile, trace_endpos);
+				
+		remove(self);
+	}
 
 	if (pointcontents(self.origin) == CONTENT_SKY)
 	{
 		remove(self);
 		return;
 	}
-
-	damg = 100 + random()*20;
-	
-	if (other.health)
-	{
-		if (other.classname == "monster_shambler")
-			damg = damg * 0.5;	// mostly immune
-		T_Damage (other, self, self.owner, damg );
-	}
-
-	// don't do radius damage to the other, because all the damage
-	// was done in the impact
-	T_RadiusDamage (self, self.owner, 120, other);
-
-//	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
-	self.origin = self.origin - 8*normalize(self.velocity);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-
-	BecomeExplosion ();
 };
 
 
@@ -382,6 +439,7 @@ void() W_FireRocket =
 	self.punchangle_x = -2;
 
 	missile = spawn ();
+	missile.health = 5;
 	missile.owner = self;
 	missile.movetype = MOVETYPE_FLYMISSILE;
 	missile.solid = SOLID_BBOX;
