@@ -345,7 +345,7 @@ void() T_MissileTouch =
 			T_Damage (other, self, self.owner, damg );
 		
 
-		sprint(self.owner,"le blow up the rocket...\n");
+			//sprint(self.owner,"le blow up the rocket...\n");
 		
 			// don't do radius damage to the other, because all the damage
 			// was done in the impact
@@ -353,9 +353,7 @@ void() T_MissileTouch =
 
 		//	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
 			self.origin = self.origin - 8*normalize(self.velocity);
-			//sprint(self.owner,"hit a ");
-			//sprint(self.owner,other.classname);
-			//sprint(self.owner,"\n");
+
 			
 			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 			WriteByte (MSG_BROADCAST, TE_EXPLOSION);
@@ -371,21 +369,12 @@ void() T_MissileTouch =
 	{
 		
 		self.health = self.health - 1;
-		sprint(self.owner,"health = ");
-		sprint(self.owner, ftos(self.health));		
-		sprint(self.owner,"\n");
+		//sprint(self.owner,"health = ");
+		//sprint(self.owner, ftos(self.health));		
+		//sprint(self.owner,"\n");
 		traceline(self.origin-normalize(self.velocity)*100, self.origin+self.velocity*1, FALSE, self);
 		//reflect off surface
-		//version 1 reflected_vel = 2 * (trace_plane_normal * self.velocity) * trace_plane_normal+ self.velocity;
 		reflected_vel = self.velocity - 2*(self.velocity*trace_plane_normal)*trace_plane_normal;
-		//reduce velocity
-		//reflected_vel = reflected_vel;
-		
-		//self.velocity = reflected_vel;
-		//self.angles = vectoangles(self.velocity);
-		//self.origin = trace_endpos;// + trace_plane_normal*5;
-		//setorigin (self, trace_endpos);
-		
 
 		//create a new rocket - for some reason just updating 
 		//the old entity doen't work..
