@@ -148,7 +148,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 	{
 		dir = targ.origin - (inflictor.absmin + inflictor.absmax) * 0.5;
 		dir = normalize(dir);
-		targ.velocity = targ.velocity + dir*damage*8;
+		targ.velocity = targ.velocity + dir*damage*12;
 	}
 
 // check for godmode or invincibility
@@ -219,7 +219,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 	local	entity	head;
 	local	vector	org;
 
-	head = findradius(inflictor.origin, damage+40);
+	head = findradius(inflictor.origin, damage+100);
 	
 	while (head)
 	{

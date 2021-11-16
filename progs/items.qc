@@ -496,62 +496,6 @@ void() weapon_touch =
 };
 
 
-/*QUAKED weapon_supershotgun (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
-
-void() weapon_supershotgun =
-{
-	precache_model ("progs/g_shot.mdl");
-	setmodel (self, "progs/g_shot.mdl");
-	self.weapon = IT_SUPER_SHOTGUN;
-	self.netname = "Double-barrelled Shotgun";
-	self.touch = weapon_touch;
-	setsize (self, '-16 -16 0', '16 16 56');
-	StartItem ();
-};
-
-/*QUAKED weapon_nailgun (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
-
-void() weapon_nailgun =
-{
-	precache_model ("progs/g_nail.mdl");
-	setmodel (self, "progs/g_nail.mdl");
-	self.weapon = IT_NAILGUN;
-	self.netname = "nailgun";
-	self.touch = weapon_touch;
-	setsize (self, '-16 -16 0', '16 16 56');
-	StartItem ();
-};
-
-/*QUAKED weapon_supernailgun (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
-
-void() weapon_supernailgun =
-{
-	precache_model ("progs/g_nail2.mdl");
-	setmodel (self, "progs/g_nail2.mdl");
-	self.weapon = IT_SUPER_NAILGUN;
-	self.netname = "Super Nailgun";
-	self.touch = weapon_touch;
-	setsize (self, '-16 -16 0', '16 16 56');
-	StartItem ();
-};
-
-/*QUAKED weapon_grenadelauncher (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
-
-void() weapon_grenadelauncher =
-{
-	precache_model ("progs/g_rock.mdl");
-	setmodel (self, "progs/g_rock.mdl");
-	self.weapon = 3;
-	self.netname = "Grenade Launcher";
-	self.touch = weapon_touch;
-	setsize (self, '-16 -16 0', '16 16 56');
-	StartItem ();
-};
-
 /*QUAKED weapon_rocketlauncher (0 .5 .8) (-16 -16 0) (16 16 32)
 */
 
@@ -566,19 +510,45 @@ void() weapon_rocketlauncher =
 	StartItem ();
 };
 
+/*QUAKED weapon_supershotgun (0 .5 .8) (-16 -16 0) (16 16 32)
+*/
+
+void() weapon_supershotgun =
+{
+	weapon_rocketlauncher();
+};
+
+/*QUAKED weapon_nailgun (0 .5 .8) (-16 -16 0) (16 16 32)
+*/
+
+void() weapon_nailgun =
+{
+	weapon_rocketlauncher();
+};
+
+/*QUAKED weapon_supernailgun (0 .5 .8) (-16 -16 0) (16 16 32)
+*/
+
+void() weapon_supernailgun =
+{
+	weapon_rocketlauncher();
+};
+
+/*QUAKED weapon_grenadelauncher (0 .5 .8) (-16 -16 0) (16 16 32)
+*/
+
+void() weapon_grenadelauncher =
+{
+	weapon_rocketlauncher();
+};
+
 
 /*QUAKED weapon_lightning (0 .5 .8) (-16 -16 0) (16 16 32)
 */
 
 void() weapon_lightning =
 {
-	precache_model ("progs/g_light.mdl");
-	setmodel (self, "progs/g_light.mdl");
-	self.weapon = 3;
-	self.netname = "Thunderbolt";
-	self.touch = weapon_touch;
-	setsize (self, '-16 -16 0', '16 16 56');
-	StartItem ();
+	weapon_rocketlauncher();
 };
 
 
@@ -680,60 +650,6 @@ local float		best;
 
 
 float WEAPON_BIG2 = 1;
-
-/*QUAKED item_shells (0 .5 .8) (0 0 0) (32 32 32) big
-*/
-
-void() item_shells =
-{
-	self.touch = ammo_touch;
-
-	if (self.spawnflags & WEAPON_BIG2)
-	{
-		precache_model ("maps/b_shell1.bsp");
-		setmodel (self, "maps/b_shell1.bsp");
-		self.aflag = 40;
-	}
-	else
-	{
-		precache_model ("maps/b_shell0.bsp");
-		setmodel (self, "maps/b_shell0.bsp");
-		self.aflag = 20;
-	}
-	self.weapon = 1;
-	self.netname = "shells";
-	setsize (self, '0 0 0', '32 32 56');
-	StartItem ();
-};
-
-/*QUAKED item_spikes (0 .5 .8) (0 0 0) (32 32 32) big
-*/
-
-void() item_spikes =
-{
-	self.touch = ammo_touch;
-
-	if (self.spawnflags & WEAPON_BIG2)
-	{
-		precache_model ("maps/b_nail1.bsp");
-		setmodel (self, "maps/b_nail1.bsp");
-		self.aflag = 50;
-	}
-	else
-	{
-		precache_model ("maps/b_nail0.bsp");
-		setmodel (self, "maps/b_nail0.bsp");
-		self.aflag = 25;
-	}
-	self.weapon = 2;
-	self.netname = "nails";
-	setsize (self, '0 0 0', '32 32 56');
-	StartItem ();
-};
-
-/*QUAKED item_rockets (0 .5 .8) (0 0 0) (32 32 32) big
-*/
-
 void() item_rockets =
 {
 	self.touch = ammo_touch;
@@ -755,6 +671,26 @@ void() item_rockets =
 	setsize (self, '0 0 0', '32 32 56');
 	StartItem ();
 };
+/*QUAKED item_shells (0 .5 .8) (0 0 0) (32 32 32) big
+*/
+
+void() item_shells =
+{
+	item_rockets();
+};
+
+/*QUAKED item_spikes (0 .5 .8) (0 0 0) (32 32 32) big
+*/
+
+void() item_spikes =
+{
+	item_rockets();
+};
+
+/*QUAKED item_rockets (0 .5 .8) (0 0 0) (32 32 32) big
+*/
+
+
 
 
 /*QUAKED item_cells (0 .5 .8) (0 0 0) (32 32 32) big
@@ -762,24 +698,7 @@ void() item_rockets =
 
 void() item_cells =
 {
-	self.touch = ammo_touch;
-
-	if (self.spawnflags & WEAPON_BIG2)
-	{
-		precache_model ("maps/b_batt1.bsp");
-		setmodel (self, "maps/b_batt1.bsp");
-		self.aflag = 12;
-	}
-	else
-	{
-		precache_model ("maps/b_batt0.bsp");
-		setmodel (self, "maps/b_batt0.bsp");
-		self.aflag = 6;
-	}
-	self.weapon = 4;
-	self.netname = "cells";
-	setsize (self, '0 0 0', '32 32 56');
-	StartItem ();
+	item_rockets();
 };
 
 
@@ -795,43 +714,7 @@ void() item_weapon =
 {
 	self.touch = ammo_touch;
 
-	if (self.spawnflags & WEAPON_SHOTGUN)
-	{
-		if (self.spawnflags & WEAPON_BIG)
-		{
-			precache_model ("maps/b_shell1.bsp");
-			setmodel (self, "maps/b_shell1.bsp");
-			self.aflag = 40;
-		}
-		else
-		{
-			precache_model ("maps/b_shell0.bsp");
-			setmodel (self, "maps/b_shell0.bsp");
-			self.aflag = 20;
-		}
-		self.weapon = 1;
-		self.netname = "shells";
-	}
-
-	if (self.spawnflags & WEAPON_SPIKES)
-	{
-		if (self.spawnflags & WEAPON_BIG)
-		{
-			precache_model ("maps/b_nail1.bsp");
-			setmodel (self, "maps/b_nail1.bsp");
-			self.aflag = 40;
-		}
-		else
-		{
-			precache_model ("maps/b_nail0.bsp");
-			setmodel (self, "maps/b_nail0.bsp");
-			self.aflag = 20;
-		}
-		self.weapon = 2;
-		self.netname = "spikes";
-	}
-
-	if (self.spawnflags & WEAPON_ROCKET)
+	if (self.spawnflags & (WEAPON_ROCKET || WEAPON_SPIKES || WEAPON_SHOTGUN))
 	{
 		if (self.spawnflags & WEAPON_BIG)
 		{

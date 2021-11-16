@@ -367,7 +367,15 @@ void() T_MissileTouch =
 	}
 	else
 	{
-		
+		local float r;
+		r = random();
+		if(r > .7)
+		{sound (self, CHAN_WEAPON,"weapons/ric1.wav", 1, ATTN_NORM); }
+		else if (r > .3)
+		{sound (self, CHAN_WEAPON, "weapons/ric2.wav", 1, ATTN_NORM); }
+		else
+		{sound (self, CHAN_WEAPON, "weapons/ric3.wav", 1, ATTN_NORM);}
+
 		self.health = self.health - 1;
 		//sprint(self.owner,"health = ");
 		//sprint(self.owner, ftos(self.health));		
@@ -804,67 +812,11 @@ void() W_SetCurrentAmmo =
 
 	self.items = self.items - ( self.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS) );
 	
-	if (self.weapon == IT_AXE)
-	{
-		self.currentammo = 0;
-		self.weaponmodel = "progs/v_axe.mdl";
-		self.weaponframe = 0;
-	}
-	else if (self.weapon == IT_SHOTGUN)
-	{
-		self.currentammo = self.ammo_shells;
-		self.weaponmodel = "progs/v_shot.mdl";
-		self.weaponframe = 0;
-		self.items = self.items | IT_SHELLS;
-	}
-	else if (self.weapon == IT_SUPER_SHOTGUN)
-	{
-		self.currentammo = self.ammo_shells;
-		self.weaponmodel = "progs/v_shot2.mdl";
-		self.weaponframe = 0;
-		self.items = self.items | IT_SHELLS;
-	}
-	else if (self.weapon == IT_NAILGUN)
-	{
-		self.currentammo = self.ammo_nails;
-		self.weaponmodel = "progs/v_nail.mdl";
-		self.weaponframe = 0;
-		self.items = self.items | IT_NAILS;
-	}
-	else if (self.weapon == IT_SUPER_NAILGUN)
-	{
-		self.currentammo = self.ammo_nails;
-		self.weaponmodel = "progs/v_nail2.mdl";
-		self.weaponframe = 0;
-		self.items = self.items | IT_NAILS;
-	}
-	else if (self.weapon == IT_GRENADE_LAUNCHER)
-	{
-		self.currentammo = self.ammo_rockets;
-		self.weaponmodel = "progs/v_rock.mdl";
-		self.weaponframe = 0;
-		self.items = self.items | IT_ROCKETS;
-	}
-	else if (self.weapon == IT_ROCKET_LAUNCHER)
-	{
 		self.currentammo = self.ammo_rockets;
 		self.weaponmodel = "progs/v_rock2.mdl";
 		self.weaponframe = 0;
 		self.items = self.items | IT_ROCKETS;
-	}
-	else if (self.weapon == IT_LIGHTNING)
-	{
-		self.currentammo = self.ammo_cells;
-		self.weaponmodel = "progs/v_light.mdl";
-		self.weaponframe = 0;
-		self.items = self.items | IT_CELLS;
-	}
-	else
-	{
-		self.currentammo = 0;
-		self.weaponmodel = "";
-		self.weaponframe = 0;
-	}
+
 };
 
 float() W_BestWeapon =
@@ -873,17 +825,7 @@ float() W_BestWeapon =
 	
 	it = self.items;
 
-	if (self.waterlevel <= 1 && self.ammo_cells >= 1 && (it & IT_LIGHTNING) )
-			return IT_LIGHTNING;
-	if(self.ammo_nails >= 2 && (it & IT_SUPER_NAILGUN) )
-		return IT_SUPER_NAILGUN;
-	if(self.ammo_shells >= 2 && (it & IT_SUPER_SHOTGUN) )
-		return IT_SUPER_SHOTGUN;
-	if(self.ammo_nails >= 1 && (it & IT_NAILGUN) )
-		return IT_NAILGUN;
-	if(self.ammo_shells >= 1 && (it & IT_SHOTGUN) )
-		return IT_SHOTGUN;
-	return IT_AXE;
+	return IT_ROCKET_LAUNCHER;
 };
 
 float() W_CheckNoAmmo =
@@ -928,58 +870,11 @@ void() W_Attack =
 	makevectors	(self.v_angle);			// calculate forward angle for velocity
 	self.show_hostile = time + 1;	// wake monsters up
 
-	if (self.weapon == IT_AXE)
-	{
-		sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);
-		r = random();
-		if (r < 0.25)
-			player_axe1 ();
-		else if (r<0.5)
-			player_axeb1 ();
-		else if (r<0.75)
-			player_axec1 ();
-		else
-			player_axed1 ();
-		self.attack_finished = time + 0.5;
-	}
-	else if (self.weapon == IT_SHOTGUN)
-	{
-		player_shot1 ();
-		W_FireShotgun ();
-		self.attack_finished = time + 0.5;
-	}
-	else if (self.weapon == IT_SUPER_SHOTGUN)
-	{
-		player_shot1 ();
-		W_FireSuperShotgun ();
-		self.attack_finished = time + 0.7;
-	}
-	else if (self.weapon == IT_NAILGUN)
-	{
-		player_nail1 ();
-	}
-	else if (self.weapon == IT_SUPER_NAILGUN)
-	{
-		player_nail1 ();
-	}
-	else if (self.weapon == IT_GRENADE_LAUNCHER)
-	{
-		player_rocket1();
-		W_FireGrenade();
-		self.attack_finished = time + 0.6;
-	}
-	else if (self.weapon == IT_ROCKET_LAUNCHER)
-	{
+
 		player_rocket1();
 		W_FireRocket();
 		self.attack_finished = time + 0.8;
-	}
-	else if (self.weapon == IT_LIGHTNING)
-	{
-		player_light1();
-		self.attack_finished = time + 0.1;
-		sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
-	}
+
 };
 
 /*
