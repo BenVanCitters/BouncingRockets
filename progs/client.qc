@@ -50,27 +50,24 @@ void() SetChangeParms =
 	parm1 = self.items;
 	parm2 = self.health;
 	parm3 = self.armorvalue;
-	if (self.ammo_shells < 25)
-		parm4 = 25;
-	else
-		parm4 = self.ammo_shells;
-	parm5 = self.ammo_nails;
+	parm4 = 0;
+	parm5 = 0;
 	parm6 = self.ammo_rockets;
-	parm7 = self.ammo_cells;
+	parm7 = 0;
 	parm8 = self.weapon;
 	parm9 = self.armortype * 100;
 };
 
 void() SetNewParms =
 {
-	parm1 = IT_SHOTGUN | IT_AXE;
+	parm1 = IT_ROCKET_LAUNCHER | IT_AXE;
 	parm2 = 100;
 	parm3 = 0;
-	parm4 = 25;
+	parm4 = 0;
 	parm5 = 0;
-	parm6 = 0;
+	parm6 = 30;
 	parm7 = 0;
-	parm8 = 1;
+	parm8 = IT_ROCKET_LAUNCHER;
 	parm9 = 0;
 };
 
@@ -1103,6 +1100,8 @@ PlayerPostThink
 Called every frame after physics are run
 ================
 */
+.float		ohkd_count;
+.float		ohkd_time;
 void() PlayerPostThink =
 {
 
@@ -1135,6 +1134,13 @@ void() PlayerPostThink =
 	if (!(self.flags & FL_ONGROUND))
 		self.jump_flag = self.velocity_z;
 
+		
+	if ((self.ohkd_count < 4) && (self.ohkd_time < time)) // 6 == seconds MOTD will display
+	{
+		self.ohkd_time = time + 1;
+		self.ohkd_count = self.ohkd_count + 1;
+		centerprint(self, " === Bouncy Rockets ===\nRockets bounce 5 times off of walls before exploding\nthanks to dan-the-man"); 
+	}
 	CheckPowerups ();
 };
 
