@@ -499,7 +499,7 @@ void() PutClientInServer =
 	
 	W_SetCurrentAmmo ();
 
-	self.attack_finished = time;
+	self.attack_finished = time+.4; //added .4 here to prevent rocket spam on respawn
 	self.th_pain = player_pain;
 	self.th_die = PlayerDie;
 	
@@ -1320,6 +1320,37 @@ void(entity targ, entity attacker) ClientObituary =
 				bprint (deathstring2);
 			}
 			return;
+		}
+		else if(attacker.classname == "bouncemissile")
+		{
+			if(attacker.aiment == targ)
+			{
+				bprint(targ.netname);
+				bprint(" bounced himself\n");
+				attacker.aiment.frags = attacker.aiment.frags - 1;
+			}
+			else
+			{
+				attacker.aiment.frags = attacker.aiment.frags + 1;
+				local float bounceCount;
+				bounceCount = 5-attacker.health;			
+				if(bounceCount < 1)
+				{
+					bprint(targ.netname);
+					bprint(" rides ");
+					bprint(attacker.aiment.netname);
+					bprint("'s rocket\n");
+				}
+				else
+				{				
+					bprint(targ.netname);
+					bprint(" rides ");
+					bprint(attacker.aiment.netname);
+					bprint("'s " );
+					bprint(ftos(bounceCount));
+					bprint("-bounce bank shot!\n");
+				}
+			}
 		}
 		else
 		{

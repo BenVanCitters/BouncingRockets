@@ -1129,10 +1129,7 @@ void() BackpackTouch =
 	self = stemp;
 
 // change weapons
-	other.ammo_shells = other.ammo_shells + self.ammo_shells;
-	other.ammo_nails = other.ammo_nails + self.ammo_nails;
 	other.ammo_rockets = other.ammo_rockets + self.ammo_rockets;
-	other.ammo_cells = other.ammo_cells + self.ammo_cells;
 
 	new = self.items;
 	if (!new)
@@ -1232,10 +1229,7 @@ void() DropBackpack =
 	else
 		item.netname = "";
 
-	item.ammo_shells = self.ammo_shells;
-	item.ammo_nails = self.ammo_nails;
 	item.ammo_rockets = self.ammo_rockets;
-	item.ammo_cells = self.ammo_cells;
 
 	item.velocity_z = 300;
 	item.velocity_x = -100 + (random() * 200);
