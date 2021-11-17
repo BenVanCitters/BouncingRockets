@@ -1326,7 +1326,7 @@ void(entity targ, entity attacker) ClientObituary =
 			if(attacker.aiment == targ)
 			{
 				bprint(targ.netname);
-				bprint(" bounced himself\n");
+				bprint(" bounced themself\n");
 				attacker.aiment.frags = attacker.aiment.frags - 1;
 			}
 			else
