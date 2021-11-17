@@ -332,38 +332,23 @@ void() T_MissileTouch =
 	local vector reflected_vel;
 	local entity missile_owner;
 	
-	//if(self.owner)
-	//{missile_owner = self.owner;}
-	//else
-	//{
-		missile_owner = self.aiment;
-	//}
+
+	//missile_owner = self.aiment;
+
 	
 	
-	//sprint(missile_owner, ftos(time));
-	//sprint(missile_owner, " -- aiment ");
-	//sprint(missile_owner, self.aiment.classname);
-	//sprint(missile_owner, "TUCH\n");
+
 	//from experimenting it looks like if self.owner is 'other' then
 	//this code is never reached...
 	
 	//if (other == self.aiment && self.health > 4)
-	//if (other == self.aiment || other.takedamage == DAMAGE_AIM )
 	//{
-		//sprint(missile_owner, "touched ");
-		//sprint(missile_owner, other.classname);
-		//sprint(missile_owner, " at ");
-		//sprint(missile_owner, ftos(self.health));
-		//sprint(missile_owner, " bounces\n");
 		//return;		// don't explode on owner
 	//}
 	if (other.takedamage == DAMAGE_AIM || self.health <= 1)
 	{
 		damg = 100 + random()*20;
 	
-		//sprint(missile_owner, "touched DAMAGE_AIM or lowhelth at ");
-		//sprint(missile_owner, ftos(self.health));
-		//sprint(missile_owner, " bounces\n");
 		if (other.health || self.health <= 1)
 		{
 			
@@ -389,14 +374,9 @@ void() T_MissileTouch =
 			BecomeExplosion ();
 			return;
 		}
-		//sprint(missile_owner, "didn't die tho\n");
 	}
 	else
 	{
-		//sprint(self.owner, "touched DAMAGE_AIM or lowhelth at ");
-		//sprint(self.owner, ftos(self.health));
-		//sprint(missile_owner, "else, bounce\n");
-		
 		//play sound
 		local float r;
 		r = random();
