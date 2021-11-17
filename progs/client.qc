@@ -1139,7 +1139,7 @@ void() PlayerPostThink =
 	{
 		self.ohkd_time = time + 1;
 		self.ohkd_count = self.ohkd_count + 1;
-		centerprint(self, " === Bouncy Rockets ===\nRockets bounce 5 times off of walls before exploding\nthanks to dan-the-man"); 
+		centerprint(self, " === Bouncy Rockets ===\n ===== by teamred =====\n Rockets bounce 5 times off of walls before exploding\nthanks to dan-the-man"); 
 	}
 	CheckPowerups ();
 };
